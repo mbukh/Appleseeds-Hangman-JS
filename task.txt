@@ -1,0 +1,36 @@
+HangMan game
+Javascript version (c) Moshe Bukhman
+
+Must use:
+✅ JavaScript
+✅ String manipulations
+✅ Arrays
+✅ Functions
+
+✅ Welcome screen 👋🏼 (figlet)
+
+❓ Submit the solution using Hive
+
+10. Fetch API for a random word
+ 10-a. Array of local words for offline game
+
+15. Print rules
+
+20. LOOP START:
+ 20-a. If all letter were guessed: goto-210
+ 20-b. If 0 lives left: goto-200
+
+    30. Ask for a guess
+        30-a. case insensitive (lowercase everything)
+
+    40. Diagnosis algorithm
+        40-a. If invalid symbols: goto-20
+        40-b. If a full word guess: goto-210
+        40-c. If a new guess is valid: goto-50
+
+    50. Letter check
+        50-a. Correct: Open all instances of the guess in the word: goto-20
+        50-b. Missed: Remove 1 life: goto-20
+
+200. Game Over (fail)
+210. Game Over (win)
