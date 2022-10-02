@@ -25,24 +25,24 @@
 	}
 
 
-
-
-
 	function showWelcomeScreen() {
 		console.clear();
 		const msg = "HANGMAN";
 
 		if (figlet === "undefined") {
-			msgLog(msg, "font-size: 2em;");
+			msgError("Figlet module not found.");
+			msgLog(msg, "color: #E44; font-size: 2em; text-shadow: 1px 1px #000;");
 			return;
 		}
 
 		if (window.location.protocol === "file:") {
 			alert("fetch APi does not support file: protocol.");
+			return;
 		}
-		figlet.defaults({fontPath: "./node_modules/figlet/fonts"});
+		// figlet.defaults({fontPath: "./node_modules/figlet/fonts"});
+		figlet.defaults({fontPath: "./figlet-fonts"});
 		figlet.preloadFonts(["Patorjk's Cheese"], () => {
-			// msgError("prefetching done (only did it for 2 fonts)!");
+			// msgError("prefetching done!");
 		});
 
 		figlet(msg,
