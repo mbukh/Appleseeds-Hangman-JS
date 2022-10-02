@@ -1,14 +1,51 @@
 #!/usr/bin/env node
-
 "use strict";
 
 const figlet = require("figlet");
-const https = require('node:https');
-const readline = require('node:readline');
+const https = require("node:https");
+const readline = require("node:readline");
+
+/*
+HangMan game
+Javascript version (c) Moshe Bukhman
+
+Must use:
+✅ JavaScript
+✅ String manipulations
+✅ Arrays
+✅ Functions
+✅ Welcome screen 👋🏼 (figlet)
+❓ Submit the solution using Hive
+🛠 Create Fetch without module
+🛠 Create Prompt without module
+
+10. Fetch API for a random word
+  10-a. Array of local words for offline game
+15. Print rules
+20. LOOP START:
+  20-a. If all letter were guessed: goto-210
+  20-b. If 0 lives left: goto-200
+
+  30. Ask for a guess
+    30-a. case insensitive (lowercase everything)
+
+  40. Diagnosis algorithm
+    40-a. If invalid symbols: goto-20
+    40-b. If a full word guess: goto-210
+        40-c. If a guess has been tried: goto-20
+    40-d. If a new guess is valid: goto-50
+
+  50. Letter check
+    50-a. Correct: Open all instances of
+        the guess in the word: goto-20
+    50-b. Missed: Remove 1 life: goto-20
+200. Game Over (fail)
+210. Game Over (win)
+*/
 
 const wordsOffline = ["Shenanigans", "Bamboozle", "Bodacious", "Brouhaha",
   "Canoodle", "Canoodle", "Goggle", "Gubbins", "Malarkey", "Nincompoop",
-  "Phalanges", "Badger",
+  "Phalanges", "Badger"
 ];
 
 let word = wordsOffline[Math.floor(Math.random() * wordsOffline.length)];
@@ -30,7 +67,7 @@ async function fetchWord() {
 
 async function showWelcomeScreen() {
   console.clear();
-  const msg = "HANG MAN";
+  const msg = "HANGMAN";
 
   if (typeof figlet === "undefined") {
     msgError("Figlet module not found.");
@@ -41,21 +78,18 @@ async function showWelcomeScreen() {
 
   // Use figlet module
   figlet(msg, {
-      font: "Patorjk's Cheese"
-    },
+    font: "Patorjk's Cheese"
+  },
     (err, text) => {
-      msgLog(text,
-        "color: #CC3333; font-size:10px; text-shadow: 2px 2px #000;"
-      );
+      msgLog(text, "color: #C33; font-size:10px; text-shadow: 2px 2px #000;");
     });
   // Help on slow connections
   await sleep(500);
 }
 
 
-
 async function startGame() {
-  showWelcomeScreen();
+  await showWelcomeScreen();
   await fetchWord();
 
   word = word.toLowerCase();
@@ -128,7 +162,7 @@ You have 10 attempts. Good luck!`);
         }
       }
       if (!isHit && !isRepeat) {
-        // Lose a life
+        // Lose an attempt
         attempts--;
         if (attempts === 0) {
           // Game over break the game
@@ -171,7 +205,7 @@ function endGame(attempts) {
   }
 }
 
-
+// Helper functions
 const msgLog = (text, style) => {
   console.log("%c" + text, (style ? style : "font-size: 1.3em;"));
 };
@@ -184,7 +218,6 @@ const msgWarning = (text) => console.log("%c" + text,
 const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
 
-
 function prompt(q) {
   return new Promise(resolve => {
     let rl = readline.createInterface({
@@ -192,12 +225,11 @@ function prompt(q) {
       output: process.stdout
     });
     rl.question(q, a => {
-      resolve(a);
       rl.close();
+      resolve(a);
     });
   });
 }
-
 
 
 function fetch(url) {
@@ -212,7 +244,7 @@ function fetch(url) {
         error = new Error('Request Failed.\n' +
           `Status Code: ${statusCode}`);
       } else if (!/^application\/json/.test(
-          contentType)) {
+        contentType)) {
         error = new Error('Invalid content-type.\n' +
           `Expected application/json but received ${contentType}`
         );
@@ -249,8 +281,6 @@ function fetch(url) {
 
   });
 }
-
-
 
 
 startGame();
