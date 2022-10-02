@@ -1,19 +1,33 @@
 (function () {
 	"use strict";
 
-	const isBrowser = (typeof window !== "undefined");
-
-	const wordsOffline = ["program", "disaster", "macaque", "beautiful", "dinosaur",
-		"computer", "fritters", "index",
-		"school", "introvert", "helicopter", "institute", "nature", "alphabet",
-		"willow", "hamadryl", "curator", "field",
-		"performer", "customer", "alternative", "quotes", "string", "livestock",
-		"absolute"
-	];
+	const wordsOffline = ["absolute", "accomplishment", "affection", "artistry", 
+			"beautiful", "bonus", "calm", "character", "cheerful", "comedy",
+			"companionship", "compassion", "compassionate", "completion",
+			"consciousness", "courageous", "delight", "dressy", "Durpose",
+			"enjoyment", "entertaining", "entrepreneur", "excellence", "excited",
+			"exciting", "expressive", "faithful", "fantastic", "free", "freedom",
+			"friendly", "fun", "genius", "genuine", "giggle", "good", "goodness",
+			"happiness", "happy", "heavenly", "honest", "hug", "immaculate",
+			"incredible", "independent", "jolly", "joy", "joyful", "kind",
+			"knowledgeable", "language", "laugh", "laughter", "likable", "live",
+			"lovable", "love", "lovemaking", "lover", "magical", "meditation",
+			"oasis", "orgasm", "outsmart", "ownership", "paradise", "particular",
+			"payday", "peaceful", "pizza", "polite", "prize", "project",
+			"quardianship", "rejoice", "relaxation", "relaxing", "responsible",
+			"sanitary", "self", "shower", "sincerity", "skill", "skilled", "smile",
+			"strength", "stvle", "successful", "sunny", "sunshine", "talented",
+			"thinker", "thriving", "tranquility", "triumph", "upbeat", "vacation",
+			"win", "winner", "wisdom"
+		];
 
 	let word = wordsOffline[Math.floor(Math.random() * wordsOffline.length)];
 
 	async function fetchWord() {
+		if (typeof figlet === "undefined") {
+			msgError("Fetch module not found.");
+			return;
+		}
 		// Fetch words from API
 		const apiUrl = "https://random-word-api.herokuapp.com/word";
 		// Async fetch
@@ -25,11 +39,11 @@
 	}
 
 
-	function showWelcomeScreen() {
+	async function showWelcomeScreen() {
 		console.clear();
 		const msg = "HANGMAN";
 
-		if (figlet === "undefined") {
+		if (typeof figlet === "undefined") {
 			msgError("Figlet module not found.");
 			msgLog(msg, "color: #E44; font-size: 2em; text-shadow: 1px 1px #000;");
 			return;
@@ -40,7 +54,7 @@
 			return;
 		}
 		// figlet.defaults({fontPath: "./node_modules/figlet/fonts"});
-		figlet.defaults({fontPath: "./figlet-fonts"});
+		figlet.defaults({ fontPath: "./figlet-fonts" });
 		figlet.preloadFonts(["Patorjk's Cheese"], () => {
 			// msgError("prefetching done!");
 		});
@@ -51,10 +65,13 @@
 				msgLog(text,
 					"color: #E44; font-size:8px; text-shadow: 1px 1px #000;");
 			});
+		// Help on slow connections
+		await sleep(500);
 	}
 
 
 	async function startGame() {
+		await showWelcomeScreen();
 		await fetchWord();
 
 		let answerArray = new Array(word.length).fill("*");
@@ -82,8 +99,8 @@
 
 			// Ask for a new guess
 			msgLog("Guess a letter or the entire word: ");
-			guess = prompt("Guess a letter or the entire word:\n" + 
-							"(Cancel to quit the game)");
+			guess = prompt("Guess a letter or the entire word:\n" +
+				"(Cancel to quit the game)");
 			msgLog("> " + (guess ? guess : "let me out of here."));
 
 			// Exit the game
@@ -144,7 +161,7 @@
 						msgError("Haste makes waste.");
 					}
 					// Show attempts count
-					msgError("You have " + attempts + 
+					msgError("You have " + attempts +
 						((attempts > 1) ? " attempts" : " attempt") +
 						" left.");
 				}
@@ -179,11 +196,11 @@
 	const msgLog = (text, style) => {
 		console.log("%c" + text, (style ? style : "font-size: 1.3em;"));
 	};
-	const msgError = (text) => console.log("%c"+text, "font-size: 1.3em; color: #C66");
-	const msgSuccess = (text) => console.log("%c"+text, "font-size: 1.3em; color: #4B4");
-	const msgWarning = (text) => console.log("%c"+text, "font-size: 1.3em; color: #e89417");
+	const msgError = (text) => console.log("%c" + text, "font-size: 1.3em; color: #C66");
+	const msgSuccess = (text) => console.log("%c" + text, "font-size: 1.3em; color: #4B4");
+	const msgWarning = (text) => console.log("%c" + text, "font-size: 1.3em; color: #e89417");
+	const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
-	showWelcomeScreen();
 	startGame();
 
 })();
