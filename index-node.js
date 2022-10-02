@@ -9,6 +9,8 @@ const readline = require("node:readline");
 HangMan game
 Javascript version (c) Moshe Bukhman
 
+Please visit the web version: https://mbukh.github.io/Hangman-JS/
+
 Must use:
 ✅ JavaScript
 ✅ String manipulations
@@ -21,7 +23,9 @@ Must use:
 
 10. Fetch API for a random word
   10-a. Array of local words for offline game
+
 15. Print rules
+
 20. LOOP START:
   20-a. If all letter were guessed: goto-210
   20-b. If 0 lives left: goto-200
